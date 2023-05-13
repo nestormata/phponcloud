@@ -84,9 +84,11 @@ class Application implements ArrayAccess
                 $template_name = array_key_exists('layout', $page_information)?$page_information['layout']:'page';
                 $data = array_merge($data, $page_information);
                 $content = $result->getContent();
+                $data['content'] = $content;
             } else { //League\CommonMark\Output\RenderedContent
                 $template_name = 'page';
                 $content = $result->getContent();
+                $data['content'] = $content;
             }
             $status = 200;
         }
