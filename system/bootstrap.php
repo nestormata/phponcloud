@@ -11,9 +11,15 @@ $dotenv->load();
 $containerBuilder = new \DI\ContainerBuilder();
 $containerBuilder->useAutowiring(true);
 
+// Create and configure the parser
+$parser_config = []; // TODO: load this from a configuration file/env file
+$environment = new League\CommonMark\Environment\Environment($parser_config);
+$environment->addExtension(new \League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension());
+$environment->addExtension(new \League\CommonMark\Extension\FrontMatter\FrontMatterExtension());
+
 // Add services to the container
 $containerBuilder->addDefinitions([
-    'markdownParser' => \DI\create(League\CommonMark\CommonMarkConverter::class),
+    'parser' => new League\CommonMark\MarkdownConverter($environment),
 ]);
 
 // Build the container

@@ -13,13 +13,24 @@ $path = strtok($path, '?');
 if (substr($path, -1) === '/') {
     $path = substr($path, 0, strlen($path));
 }
+// Handle index page
+if ($path === '/') {
+    $path = '/index';
+}
 
+// TODO: Move this to a default controller instead
 // If the requested file is a markdown file and exists, convert it to HTML
 if (file_exists(__DIR__ . '/../content' . $path . '.md')) {
     $markdown = file_get_contents(__DIR__ . '/../content' . $path . '.md');
-    $markdownParser = $container->get('markdownParser');
-    $html = $markdownParser->convertToHtml($markdown);
-    echo $html;
+    $markdownParser = $container->get('parser');
+    $result = $markdownParser->convert($markdown);
+    if ($result instanceof League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter) {
+        $page_information = $result->getFrontMatter();
+        $content = $result->getContent();
+    } else { //League\CommonMark\Output\RenderedContent
+        $content = $result->getContent();
+    }
+    echo $content;
     exit;
 }
 
