@@ -5,11 +5,13 @@ namespace PHPOnCloud\App;
 use ArrayAccess;
 use DI\Container;
 use DI\ContainerBuilder;
+use Dotenv\Dotenv;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
 use League\CommonMark\MarkdownConverter;
+use PHPOnCloud\App\Managers\TemplateManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,9 +21,15 @@ class Application implements ArrayAccess
      * The Injection container
      */
     protected Container $container;
+    protected Dotenv $env;
+    private string $base_path;
 
-    public function __construct()
+    public function __construct(string $base_path)
     {
+        $this->base_path = $base_path;
+        // Load environment variables
+        $env = Dotenv::createImmutable(__DIR__ . '/../');
+        $env->load();
     }
 
     public function setUp()
@@ -36,7 +44,9 @@ class Application implements ArrayAccess
         $environment->addExtension(new FrontMatterExtension());
         // Add services to the container
         $containerBuilder->addDefinitions([
+            'app' => $this,
             'parser' => new MarkdownConverter($environment),
+            'template' => new TemplateManager($this),
         ]);
         // Build the container
         $this->container = $containerBuilder->build();
@@ -60,21 +70,30 @@ class Application implements ArrayAccess
         }
 
         // TODO: Move this to a default controller instead
+        $status = 404;
+        $template_name = 'message';
+        $data = ['message' => 'Page not found'];
         // If the requested file is a markdown file and exists, convert it to HTML
         if (file_exists(__DIR__ . '/../content' . $path . '.md')) {
             $markdown = file_get_contents(__DIR__ . '/../content' . $path . '.md');
             $markdownParser = $this->container->get('parser');
             $result = $markdownParser->convert($markdown);
+            $data = [];
             if ($result instanceof RenderedContentWithFrontMatter) {
                 $page_information = $result->getFrontMatter();
+                $template_name = array_key_exists('layout', $page_information)?$page_information['layout']:'page';
+                $data = array_merge($data, $page_information);
                 $content = $result->getContent();
             } else { //League\CommonMark\Output\RenderedContent
+                $template_name = 'page';
                 $content = $result->getContent();
             }
-            $response = new Response($content, 200);
-            return $response;
+            $status = 200;
         }
-        $response = new Response('Page not found', 404);
+        /** @var TemplateManager */
+        $template = $this['template'];
+        $html = $template->render($template_name, $data);
+        $response = new Response($html, $status);
         return $response;
     }
 
@@ -128,5 +147,41 @@ class Application implements ArrayAccess
     public function offsetUnset($offset): void
     {
         // no functionality
+    }
+
+    /**
+     * Gets the application base path.
+     * @return string The path that encloses all the application.
+     */
+    public function getBasePath(): string
+    {
+        return $this->base_path;
+    }
+
+    /**
+     * Gets a sub path from the base path.
+     * @return string The complete route to the sub path.
+     */
+    public function getPath(string $sub_path): string
+    {
+        return $this->getBasePath() . $sub_path;
+    }
+
+    /**
+     * Get the full path of the templates directory.
+     * @return string The complete route to the templates directory.
+     */
+    public function getTemplatesPath(): string
+    {
+        return $this->getPath('templates/');
+    }
+
+    /**
+     * Get the full path to the cache directory.
+     * @return string The complete route to the cache directory.
+     */
+    public function getCachePath(): string
+    {
+        return $this->getPath('cache/');
     }
 }

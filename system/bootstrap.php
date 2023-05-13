@@ -1,13 +1,14 @@
 <?php
 
+/**
+ * The bootrstrap is in charge of setting up the basic application and configuration
+ * and returning it to the index.
+ */
+
 use PHPOnCloud\App\Application;
 
-// Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
-
 // Initialize application
-$app = new Application();
+$app = new Application(__DIR__ . '/../');
 $app->setUp();
 
 return $app;
