@@ -3,7 +3,10 @@
 namespace PHPOnCloud\App\Managers;
 
 use PHPOnCloud\App\Application;
+use PHPOnCloud\App\Extensions\TwigCustomExtension;
 use Twig\Environment;
+use Twig\Extension\CoreExtension;
+use Twig\Extension\EscaperExtension;
 use Twig\Loader\FilesystemLoader;
 
 class TemplateManager
@@ -13,7 +16,11 @@ class TemplateManager
     public function __construct(Application $application)
     {
         $loader = new FilesystemLoader($application->getTemplatesPath());
-        $this->twig = new Environment($loader, ['cache' => $application->getCachePath()]);
+        $this->twig = new Environment($loader, [
+            'cache' => $application->getCachePath(),
+            'auto_reload' => true,
+        ]);
+        $this->twig->addExtension(new TwigCustomExtension($application));
     }
 
     /**

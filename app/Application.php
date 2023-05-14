@@ -173,17 +173,22 @@ class Application implements ArrayAccess
      * Get the full path of the templates directory.
      * @return string The complete route to the templates directory.
      */
-    public function getTemplatesPath(): string
+    public function getTemplatesPath($sub_path = ''): string
     {
-        return $this->getPath('templates/');
+        return $this->getPath('templates/' . $sub_path);
     }
 
     /**
      * Get the full path to the cache directory.
      * @return string The complete route to the cache directory.
      */
-    public function getCachePath(): string
+    public function getCachePath($sub_path = ''): string
     {
-        return $this->getPath('cache/');
+        return $this->getPath('cache/' . $sub_path);
+    }
+
+    public function getPublicPath($sub_path = ''): string
+    {
+        return $this->getPath('public/' . $sub_path);
     }
 }
