@@ -46,3 +46,19 @@ What I want to achieve for the project to be more mature and be able to be used 
 - (Admin) Handle translations of content
 - (Admin) Manage blocks
 - (Site) More advance block system
+
+## How to run this locally
+
+The project contains a docker configuration to run the project locally.
+
+- Make sure to download and install docker
+- Clone the repository
+- Build docker: `docker-compose build`
+- Run it: `docker-compose up`
+- Install PHP dependecies: `docker-compose exec -it php.test composer install`
+- Install Node dependencies: `docker-compose exec -it php.test npm install`
+- Visit http://localhost/
+
+After that you can add any MarkDown FrontMatter documents in the `/content/` directory.
+For example, adding a document `/content/index.md` and that will be render under `http://localhost/`.
+Another example, addint a document `/content/2023/05/15/a-nice-post.md` would show under `http://localhost/2023/05/15/a-nice-post/`.
