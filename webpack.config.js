@@ -1,10 +1,11 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = {
   entry: {
-    app: './assets/js/app.js',
+    app: ['./assets/js/app.js', './assets/sass/app.scss'],
     frontpage: './assets/sass/frontpage.scss',
     post: './assets/sass/post.scss',
     notfound: './assets/sass/404.scss',
@@ -16,6 +17,14 @@ module.exports = {
   },
   module: {
     rules: [
+        {
+          mimetype: 'image/svg+xml',
+          scheme: 'data',
+          type: 'asset/resource',
+          generator: {
+            filename: 'icons/[hash].svg'
+          }
+        },
         {
             test: /\.s[ac]ss$/i,
             use: [
@@ -37,6 +46,11 @@ module.exports = {
     }),
     new WebpackManifestPlugin({
         publicPath: "/assets/",
+    }),
+    new CopyPlugin({
+        patterns: [
+            { from: "assets/images", to: "images" },
+        ]
     }),
   ],
 };

@@ -4,14 +4,153 @@
 <head>
   <meta charset="utf-8">
   <title>{{ title }}</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ versioned_asset('frontpage.css') }}">
+  <meta name="description" content="{{ description }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
+  <!-- Meta Tags for SEO and Crawlers -->
+  <meta name="description" content="Description of your page, ideally 150-160 characters.">
+  <meta name="keywords" content="Comma-separated list of relevant keywords for your page.">
+  <meta name="author" content="Your Name or Company Name">
+  <meta name="robots" content="index,follow">
+  
+  <!-- Open Graph Meta Tags (for Facebook, Twitter, LinkedIn, etc.) -->
+  <meta property="og:title" content="Your Page Title">
+  <meta property="og:description" content="Description of your page, ideally 150-160 characters.">
+  <meta property="og:image" content="URL to your page's main image for social sharing.">
+  <meta property="og:url" content="URL of your page">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:title" content="Your Page Title">
+  <meta name="twitter:description" content="Description of your page, ideally 150-160 characters.">
+  <meta name="twitter:image" content="URL to your page's main image for social sharing.">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <!-- Canonical URL (if necessary) -->
+  <link rel="canonical" href="URL of the preferred version of the page">
+  
+  <!-- Additional Meta Tags -->
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#ffffff">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="path/to/favicon.png">
+
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge;"/>
+  <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ versioned_asset('app.css') }}">
+   <style>
+    /* Custom styles */
+    .menu {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    
+    .banner {
+      background-image: url('path/to/banner-image.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+    }
+    
+    .box {
+      background-color: #f8f9fa;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 
-<body>
+<body class="template-{{ layout }}">
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      {% block header %}
+      <picture>
+        <source srcset="/assets/images/strip-small-mini.png" media="(max-width: 576px)">
+        <source srcset="/assets/images/strip-small.png" media="(max-width: 768px)">
+        <source srcset="/assets/images/strip-small-small.png" media="(max-width: 992px)">
+        <img src="/assets/images/strip-small-small.png" alt="PHP on Cloud">
+      </picture>
+      {% endblock %}
+    </div>
+  </header>
 
-  {% block content %}{% endblock %}
+  <!-- Menu -->
+  <nav class="menu">
+    <div class="container">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Latest Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Cheatsheets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Banner -->
+  {# TODO: set up banner block #}
+  {# <section class="banner"></section> #}
+
+  <!-- Boxes -->
+  {# TODO: set up boxes block #}
+  {# <section class="boxes">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="box">
+            <img src="path/to/image1.jpg" alt="Image 1">
+            <h3>Box 1 Title</h3>
+            <p>Box 1 text goes here.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box">
+            <img src="path/to/image2.jpg" alt="Image 2">
+            <h3>Box 2 Title</h3>
+            <p>Box 2 text goes here.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box">
+            <img src="path/to/image3.jpg" alt="Image 3">
+            <h3>Box 3 Title</h3>
+            <p>Box 3 text goes here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> #}
+
+  <article>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+  </article>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>PHP on Cloud @ 2023</p>
+      <p>Strong content about PHP development</p>
+    </div>
+  </footer>
 
 </body>
 

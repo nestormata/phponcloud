@@ -1,4 +1,13 @@
 {% extends "layout/base.twig" %}
+
+{% block header %}
+    <picture>
+        <source srcset="/assets/images/logo-mini.png" media="(max-width: 576px)">
+        <source srcset="/assets/images/logo.png" media="(max-width: 768px)">
+        <img src="/assets/images/logo.png" alt="PHP on Cloud">
+    </picture>
+{% endblock %}
+
 {% block content %}
 <h1>{{ title }}</h1>
 {{ content|raw }}

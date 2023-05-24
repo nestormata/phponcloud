@@ -82,7 +82,7 @@ class Application implements ArrayAccess
             if ($result instanceof RenderedContentWithFrontMatter) {
                 $page_information = $result->getFrontMatter();
                 $template_name = array_key_exists('layout', $page_information)?$page_information['layout']:'page';
-                $data = array_merge($data, $page_information);
+                $data = array_merge($data, $page_information, ['layout' => $template_name]);
                 $content = $result->getContent();
                 $data['content'] = $content;
             } else { //League\CommonMark\Output\RenderedContent

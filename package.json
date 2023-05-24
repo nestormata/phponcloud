@@ -11,7 +11,7 @@
   "author": "Nestor Mata Cuthbert <nestor@profesional.co.cr>",
   "license": "ISC",
   "devDependencies": {
-    "cirrus-ui": "^0.7.1",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "mini-css-extract-plugin": "^2.7.5",
     "sass": "^1.62.1",
@@ -20,5 +20,8 @@
     "webpack": "^5.82.1",
     "webpack-cli": "^5.1.1",
     "webpack-manifest-plugin": "^5.0.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0-alpha3"
   }
 }
