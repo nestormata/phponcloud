@@ -26,10 +26,20 @@ class Application implements ArrayAccess
 
     public function __construct(string $base_path)
     {
-        $this->base_path = $base_path;
+        $this->base_path = realpath($base_path);
         // Load environment variables
-        $env = Dotenv::createImmutable(__DIR__ . '/../');
-        $env->load();
+        $this->env = Dotenv::createImmutable($this->base_path, $this->getEnvironmentFileNames());
+        $this->env->load();
+    }
+
+    private function getEnvironmentFileNames()
+    {
+        $names = [];
+        if ($environment_name = getenv('APP_ENV')) {
+            $names[] = '.env.' . $environment_name;
+        }
+        $names[] = '.env'; // Default name
+        return $names;
     }
 
     public function setUp()
@@ -166,14 +176,14 @@ class Application implements ArrayAccess
      */
     public function getPath(string $sub_path): string
     {
-        return $this->getBasePath() . $sub_path;
+        return $this->getBasePath() . '/' . $sub_path;
     }
 
     /**
      * Get the full path of the templates directory.
      * @return string The complete route to the templates directory.
      */
-    public function getTemplatesPath($sub_path = ''): string
+    public function getTemplatesPath(string $sub_path = ''): string
     {
         return $this->getPath('templates/' . $sub_path);
     }
@@ -182,13 +192,34 @@ class Application implements ArrayAccess
      * Get the full path to the cache directory.
      * @return string The complete route to the cache directory.
      */
-    public function getCachePath($sub_path = ''): string
+    public function getCachePath(string $sub_path = ''): string
     {
         return $this->getPath('cache/' . $sub_path);
     }
 
-    public function getPublicPath($sub_path = ''): string
+    /**
+     * Get the full path to the public directory.
+     * @return string The complete route to the public directory.
+     */
+    public function getPublicPath(string $sub_path = ''): string
     {
         return $this->getPath('public/' . $sub_path);
+    }
+
+    public function getContentPath(string $sub_path = ''): string
+    {
+        $content_base = $_ENV['CONTENT_DIR'] ?? 'content/';
+        return $this->getPath($content_base . $sub_path);
+    }
+
+    /**
+     * In case is desired to use this method to access an environment variable using a default value.
+     * @param string $varname The name of the variable to fetch.
+     * @param string $default The default value, optional.
+     * @return string The value of the variable.
+     */
+    public function getEnv(string $varname, ?string $default = null): ?string
+    {
+        return $_ENV[$varname] ?? $default;
     }
 }

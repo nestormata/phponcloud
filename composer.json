@@ -28,9 +28,23 @@
         "symfony/yaml": "^6.2",
         "twig/twig": "^3.6"
     },
-    "autoload-dev": {
+    "autoload": {
         "psr-4": {
             "PHPOnCloud\\App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.6",
+        "fakerphp/faker": "^1.22"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }
