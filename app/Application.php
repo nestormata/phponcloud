@@ -212,6 +212,17 @@ class Application implements ArrayAccess
         return $this->getPath($content_base . $sub_path);
     }
 
+    public function getUrl(string $uri = ''): string
+    {
+        $is_secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+        $base_url = $_ENV['BASE_URL'] ?? 
+            ( ($is_secure ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] );
+        if (str_starts_with($uri, '/')) {
+            $uri = substr($uri, 1);
+        }
+        return trim($base_url . $uri, '/');
+    }
+
     /**
      * In case is desired to use this method to access an environment variable using a default value.
      * @param string $varname The name of the variable to fetch.

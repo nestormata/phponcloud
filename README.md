@@ -57,6 +57,7 @@ The project contains a docker configuration to run the project locally.
 - Run it: `docker-compose up`
 - Install PHP dependecies: `docker-compose exec -it php.test composer install`
 - Install Node dependencies: `docker-compose exec -it php.test npm install`
+- Compile WebPack: `docker-compose exec -it php.test npm run dev`
 - Visit http://localhost/
 
 After that you can add any MarkDown FrontMatter documents in the `/content/` directory.
