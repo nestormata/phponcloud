@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use GuzzleHttp\Client;
 use PHPOnCloud\App\Application;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RecursiveDirectoryIterator;
@@ -12,7 +13,10 @@ use function PHPUnit\Framework\directoryExists;
 abstract class TestCase extends BaseTestCase
 {
     protected static $app;
-        /**
+
+    protected Client $client = null;
+
+    /**
      * This method is called before the first test of this test class is run.
      */
     public static function setUpBeforeClass(): void
@@ -55,5 +59,13 @@ abstract class TestCase extends BaseTestCase
             }
             rmdir($content_dir);
         }
+    }
+
+    protected function getClient()
+    {
+        if (!isset($this->client)) {
+            $this->client = new Client();
+        }
+        return $this->client;
     }
 }
